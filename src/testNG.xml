@@ -1,0 +1,8 @@
+<suite name="Test Suite">
+    <test name="Test cases">
+        <classes>
+            <class name="testcases.HomePage">
+            </class>
+        </classes>
+    </test>
+</suite>
