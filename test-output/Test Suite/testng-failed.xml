@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Test Suite]">
+  <parameter name="browser" value="chrome"/>
+  <parameter name="testurl" value="https://shop.demoqa.com/#"/>
+  <test name="Test cases(failed)">
+    <classes>
+      <class name="testcases.HomePage">
+        <methods>
+          <include name="setUpBrowsers"/>
+          <include name="Login"/>
+        </methods>
+      </class> <!-- testcases.HomePage -->
+    </classes>
+  </test> <!-- Test cases(failed) -->
+</suite> <!-- Failed suite [Test Suite] -->
