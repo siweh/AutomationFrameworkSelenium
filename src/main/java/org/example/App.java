@@ -13,6 +13,5 @@ public class App
     {
         System.setProperty("webdriver.chrome.driver", "C:\\work\\WebDrivers\\chromedriver\\chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-
     }
 }

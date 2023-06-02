@@ -1,8 +1,16 @@
 <suite name="Test Suite">
-    <test name="Test cases">
+<!--    <parameter name="testurl" value="https://shop.demoqa.com/#"/>
+  <parameter name="testurl" value="https://shop.demoqa.com/#"/>-->
+    <test name="Test cases" >
         <classes>
-            <class name="testcases.HomePage">
+            <class name="testcases.LoginPage">
+                <methods>
+                    <include name="validUserlogin"/>
+                    <include name="InvalidUserLogin"/>
+                </methods>
             </class>
+<!--            <class name="testcases.Products"/>-->
+<!--            <class name="testcases.Checkout"/>-->
         </classes>
     </test>
 </suite>

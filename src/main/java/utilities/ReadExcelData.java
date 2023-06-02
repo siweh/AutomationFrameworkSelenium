@@ -1,18 +1,24 @@
 package utilities;
 
 import org.apache.poi.ss.usermodel.*;
+import org.testng.annotations.DataProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 public class ReadExcelData {
     public static void main(String[] args) throws IOException {
         ReadExcelData readData = new ReadExcelData();
-        readData.getExcelFileData("login");
+        readData.getExcelFileData("Login");
     }
 
+    @DataProvider(name="bvtdata")
     public String[][] getExcelFileData(String excelSheetName) throws IOException {
+        //Reflect by getting the name og the method which in this case is login
+//        String excelSheetName = reflect.getName();
+        System.out.println(excelSheetName);
         File file = new File(System.getProperty("user.dir") + "\\src\\test\\java\\testdata\\testdata.xlsx");
         //Create a stream for the file variable
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -22,11 +28,11 @@ public class ReadExcelData {
 
         //get number of used rows
         int totalRows = sheetName.getLastRowNum();
-        System.out.println(totalRows);
+        System.out.println("Total rows: "+totalRows);
         //Get number of columns
         Row rowCells = sheetName.getRow(0);
         int totalColumn = rowCells.getLastCellNum();
-        System.out.println(totalColumn);
+        System.out.println("Total column: "+totalColumn);
 
         //Format data
         DataFormatter format = new DataFormatter();

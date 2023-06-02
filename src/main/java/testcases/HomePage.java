@@ -5,24 +5,30 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.annotations.Test;
+import utilities.ReadExcelData;
+
 import java.util.List;
 
 public class HomePage extends BaseTest {
+    public By username = By.id("username");
+    public By password = By.id("password");
+    private static boolean isLoggedIn = true;
+    private static boolean isLoggedOut = true;
+    public static boolean match;
 
 //    @Test
     public static void HomePageScreen() {
-        driver.findElement(By.linkText("Dismiss")).click();
+        driver.findElement(By.xpath("//a[normalize-space()='Dismiss']")).click();
         driver.findElement(By.linkText("My Account")).click();
     }
 
-//    @Test
-    public static void ValidUserLogin(){
-        driver.findElement(By.linkText("Dismiss")).click();
-        driver.findElement(By.linkText("My Account")).click();
-        Login();
-        driver.findElement(By.linkText("ToolsQA Demo Site")).click();
+    @Test
+    public static boolean ValidUserLogin() throws InterruptedException {
+        driver.findElement(By.xpath("//a[normalize-space()='Dismiss']")).click();
+//        driver.findElement(By.xpath("//a[normalize-space()='My Account']")).click();
+//        driver.findElement(By.linkText("ToolsQA Demo Site")).click();
         List<WebElement> links = driver.findElements(By.cssSelector(".noo-product-item"));
-        System.out.println(links.size());
+//        System.out.println(links.size());
         links.get(3).click();
         //Select a dropdown with select tag
         WebElement 	colorDropdown = driver.findElement(By.id("color"));
@@ -35,15 +41,43 @@ public class HomePage extends BaseTest {
 
         WebElement addToCartBtn = driver.findElement(By.xpath("//button[normalize-space()='Add to cart']"));
         addToCartBtn.click();
-        driver.findElement(By.linkText("My Account")).click();
-        driver.findElement(By.linkText("Logout")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.xpath("//a[normalize-space()='My Account']")).click();
+        driver.findElement(By.xpath("(//a[normalize-space()='Logout'])[1]")).click();
+        return true;
     }
 
-//    @Test
-    public static void UserCompletesOrder(){
+    @Test
+    public static String SuccessfullAddedToCartMessage() throws InterruptedException {
+        driver.findElement(By.xpath("//a[normalize-space()='Dismiss']")).click();
+//        driver.findElement(By.xpath("//a[normalize-space()='My Account']")).click();
+//        driver.findElement(By.linkText("ToolsQA Demo Site")).click();
+        List<WebElement> links = driver.findElements(By.cssSelector(".noo-product-item"));
+//        System.out.println(links.size());
+        links.get(3).click();
+        //Select a dropdown with select tag
+        WebElement 	colorDropdown = driver.findElement(By.id("color"));
+        WebElement 	sizeDropdown = driver.findElement(By.id("size"));
+
+        Select dropdownColor = new Select(colorDropdown);
+        Select dropdownSize = new Select(sizeDropdown);
+        dropdownColor.selectByIndex(1);
+        dropdownSize.selectByIndex(1);
+
+        WebElement addToCartBtn = driver.findElement(By.xpath("//button[normalize-space()='Add to cart']"));
+        addToCartBtn.click();
+        Thread.sleep(2000);
+
+        String addToCartText = driver.findElement(By.cssSelector(".woocommerce-message")).getText();
+        addToCartText.trim();
+        System.out.println(addToCartText);
+        return addToCartText;
+    }
+
+    @Test
+    public static boolean UserCompletesOrder(){
         driver.findElement(By.linkText("Dismiss")).click();
         driver.findElement(By.linkText("My Account")).click();
-        Login();
         driver.findElement(By.linkText("ToolsQA Demo Site")).click();
         List<WebElement> links = driver.findElements(By.cssSelector(".noo-product-item"));
         System.out.println(links.size());
@@ -60,6 +94,10 @@ public class HomePage extends BaseTest {
         WebElement addToCartBtn = driver.findElement(By.xpath("//button[normalize-space()='Add to cart']"));
         addToCartBtn.click();
         driver.findElement(By.linkText("View cart")).click();
+        List<WebElement> cartProductList = driver.findElements(By.cssSelector("td[class='product-name'] a"));
+        System.out.println(cartProductList);
+        match = cartProductList.stream().anyMatch(cartProduct -> cartProduct.getText().equalsIgnoreCase("Tokyo Talkies"));
+
         driver.findElement(By.xpath("//a[normalize-space()='Proceed to checkout']")).click();
         driver.findElement(By.id("billing_first_name")).clear();
         driver.findElement(By.id("billing_first_name")).sendKeys("Lisakhanya");
@@ -94,6 +132,7 @@ public class HomePage extends BaseTest {
             System.out.println("Checkbox is not selected");
         }
         driver.findElement(By.id("place_order")).click();
+        return true;
     }
     public static void Register(){
         driver.findElement(By.linkText("Dismiss")).click();
@@ -104,15 +143,22 @@ public class HomePage extends BaseTest {
         driver.findElement(By.name("register")).click();
     }
 
-
     @Test
-    public static void Login(){
+    public static Boolean Login(String username, String password) throws InterruptedException{
         HomePageScreen();
-        driver.findElement(By.id("username")).sendKeys("mihle@gmail.com");
-        driver.findElement(By.id("password")).sendKeys("Mihlelihle123");
+        driver.findElement(By.id("username")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.name("login")).click();
-        driver.findElement(By.linkText("Dashboard")).click();
+        driver.findElement(By.linkText("ToolsQA Demo Site")).click();
+        return true;
+    }
 
+    public static boolean isLoggedIn(){
+        return isLoggedIn;
+    }
+
+    public static boolean isLoggedOut(){
+        return isLoggedOut;
     }
 
     //Invalid User login with incorrect username
@@ -146,5 +192,11 @@ public class HomePage extends BaseTest {
         driver.findElement(By.linkText("Lost your password?")).click();
         driver.findElement(By.id("user_login")).sendKeys("mihle@gmail.com");
         driver.findElement(By.cssSelector(".woocommerce-Button")).click();
+    }
+
+    public static String getTitle() {
+        String expectedtitle = "My Account – ToolsQA Demo Site";
+        String actualTitle = driver.getTitle();
+        return actualTitle;
     }
 }
